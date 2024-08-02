@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Profile</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .card:hover {
+        transform: scale(1.02);
+        transition: transform 0.2s;
+      }
+      .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .card-title {
+        color: #333;
+      }
+      .card-text,
+      .small {
+        color: #555;
+      }
+      .status {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      .heading {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        padding: 10px 0;
+        border-bottom: 2px solid #007bff;
+      }
+      .table th,
+      .card-header {
+        background-color: transparent;
+        color: #333;
+        font-size: 1.25rem;
+        border-bottom: 2px solid #007bff;
+      }
+      .go-back-btn {
+        margin-left: 0.5cm;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary go-back-btn" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+
+    <div class="container my-5">
+      <div class="text-center mb-4">
+        <h1 class="display-4">Admin Profile</h1>
+      </div>
+
+      <div class="mb-5">
+        <div class="heading">Flagged Items</div>
+        <div class="card-body">
+          <div class="row">
+            {% if flagged_items %} {% for flag in flagged_items %}
+            <div class="col-md-4 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Item Type: {{ flag.item_type }}</h5>
+                  <p class="card-text">Item ID: {{ flag.item_id }}</p>
+                  <p class="card-text">Item Name: {{ flag.item_name }}</p>
+                  <p class="card-text">Reason: {{ flag.reason }}</p>
+                  {% if flag.item_type == 'Influencer' %}
+                  <a
+                    href="{{ url_for('view_influencer', influencer_id=flag.item_id) }}"
+                    class="btn btn-primary"
+                    >View Influencer</a
+                  >
+                  {% elif flag.item_type == 'Sponsor' %}
+                  <a
+                    href="{{ url_for('view_sponsor', sponsor_id=flag.item_id) }}"
+                    class="btn btn-primary"
+                    >View Sponsor</a
+                  >
+                  {% elif flag.item_type == 'Campaign' %}
+                  <a
+                    href="{{ url_for('view_campaign', campaign_id=flag.item_id) }}"
+                    class="btn btn-primary"
+                    >View Campaign</a
+                  >
+                  {% endif %}
+                  <form
+                    action="{{ url_for('remove_flag', flag_id=flag.id) }}"
+                    method="POST"
+                    class="mt-2"
+                  >
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {% endfor %} {% else %}
+            <p class="text-muted">No flagged items found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-5">
+        <div class="heading">Ongoing Campaigns</div>
+        <div class="card-body">
+          <div class="row">
+            {% for campaign in ongoing_campaigns %}
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="card-title">{{ campaign.name }}</h5>
+                    <small class="text-muted"
+                      >{{ campaign.start_date }} - {{ campaign.end_date
+                      }}</small
+                    >
+                  </div>
+                  <p class="card-text">{{ campaign.description }}</p>
+                  <small class="status text-primary">Status: Ongoing</small>
+                  <a
+                    href="{{ url_for('view_campaign', campaign_id=campaign.id) }}"
+                    class="btn btn-primary mt-2"
+                    >View Campaign</a
+                  >
+                </div>
+              </div>
+            </div>
+            {% endfor %} {% if not ongoing_campaigns %}
+            <p class="text-muted">No ongoing campaigns found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="heading">Completed Campaigns</div>
+        <div class="card-body">
+          <div class="row">
+            {% for campaign in completed_campaigns %}
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="card-title">{{ campaign.name }}</h5>
+                    <small class="text-muted"
+                      >{{ campaign.start_date }} - {{ campaign.end_date
+                      }}</small
+                    >
+                  </div>
+                  <p class="card-text">{{ campaign.description }}</p>
+                  <small class="status text-success">Status: Completed</small>
+                  <a
+                    href="{{ url_for('view_campaign', campaign_id=campaign.id) }}"
+                    class="btn btn-primary mt-2"
+                    >View Campaign</a
+                  >
+                </div>
+              </div>
+            </div>
+            {% endfor %} {% if not completed_campaigns %}
+            <p class="text-muted">No completed campaigns found.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2 class="heading">Influencers</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Niche</th>
+            <th>Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for influencer in influencers %}
+          <tr>
+            <td>{{ influencer.id }}</td>
+            <td>{{ influencer.name }}</td>
+            <td>{{ influencer.niche}}</td>
+            <td>
+              <a
+                href="{{ url_for('view_influencer', influencer_id=influencer.id) }}"
+                class="btn btn-primary"
+                >View</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2 class="heading">Sponsors</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sponsor in sponsors %}
+          <tr>
+            <td>{{ sponsor.id }}</td>
+            <td>{{ sponsor.username }}</td>
+            <td>
+              <a
+                href="{{ url_for('view_sponsor', sponsor_id=sponsor.id) }}"
+                class="btn btn-primary"
+                >View</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2 class="heading">Campaigns</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Budget</th>
+            <th>View</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for campaign in campaigns %}
+          <tr>
+            <td>{{ campaign.id }}</td>
+            <td>{{ campaign.name }}</td>
+            <td>{{ campaign.description }}</td>
+            <td>{{ campaign.start_date }}</td>
+            <td>{{ campaign.end_date }}</td>
+            <td>{{ campaign.budget }}</td>
+            <td>
+              <a
+                href="{{ url_for('view_campaign', campaign_id=campaign.id) }}"
+                class="btn btn-primary"
+                >View</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

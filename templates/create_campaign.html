@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Manage Campaigns</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    </nav>
+    <div class="container mt-5">
+      <h1 class="text-center">Manage Campaigns</h1>
+
+      <!-- Form to create a new campaign -->
+      <form action="{{ url_for('campaign') }}" method="post" class="mb-4">
+        <div class="form-group">
+          <label for="name">Campaign Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            required
+          />
+        </div>
+        <!-- Add other input fields for description, dates, budget, visibility, and goals -->
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="start_date">Start Date:</label>
+          <input
+            type="date"
+            id="start_date"
+            name="start_date"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="end_date">End Date:</label>
+          <input
+            type="date"
+            id="end_date"
+            name="end_date"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="budget">Budget:</label>
+          <input
+            type="number"
+            id="budget"
+            name="budget"
+            class="form-control"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="visibility">Visibility:</label>
+          <select
+            id="visibility"
+            name="visibility"
+            class="form-control"
+            required
+          >
+            <option value="Public">Public</option>
+            <option value="Private">Private</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="goals">Goals:</label>
+          <input
+            type="text"
+            id="goals"
+            name="goals"
+            class="form-control"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="niche">Niche:</label>
+          <select id="niche" name="niche" class="form-control" required>
+            <option value="Fashion">Fashion</option>
+            <option value="Technology">Technology</option>
+            <option value="Health & Fitness">Health & Fitness</option>
+            <option value="Travel">Travel</option>
+            <option value="Food & Beverage">Food & Beverage</option>
+            <option value="Beauty">Beauty</option>
+            <option value="Gaming">Gaming</option>
+            <option value="Finance">Finance</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group" id="other-niche-group" style="display: none">
+          <label for="other_niche">Other Niche:</label>
+          <input
+            type="text"
+            id="other_niche"
+            name="other_niche"
+            class="form-control"
+          />
+        </div>
+
+        <script>
+          document
+            .getElementById("niche")
+            .addEventListener("change", function () {
+              var otherNicheGroup =
+                document.getElementById("other-niche-group");
+              if (this.value === "Other") {
+                otherNicheGroup.style.display = "block";
+                document.getElementById("other_niche").required = true;
+              } else {
+                otherNicheGroup.style.display = "none";
+                document.getElementById("other_niche").required = false;
+              }
+            });
+        </script>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Create Campaign</button>
+        </div>
+      </form>
+
+      <!-- Button to show tables or other actions -->
+      <div class="text-center mt-4">
+        <a href="{{ url_for('show_campaign') }}" class="btn btn-success"
+          >Show Campaigns</a
+        >
+      </div>
+
+      {% if campaigns %}
+      <div class="row mt-4">
+        {% for campaign in campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ campaign.start_date.strftime('%Y-%m-%d') }} to {{
+                campaign.end_date.strftime('%Y-%m-%d') }}
+              </h6>
+              <p class="card-text">{{ campaign.description }}</p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Visibility:</strong> {{ campaign.visibility }}
+              </p>
+              <p class="card-text">
+                <strong>Goals:</strong> {{ campaign.goals }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ campaign.niche }}
+              </p>
+
+              <!-- Add Ads Button -->
+              <!-- Inside the card for each campaign -->
+              <a
+                href="{{ url_for('add_ads', campaign_id=campaign.id) }}"
+                class="btn btn-info btn-sm"
+                >Add Ads</a
+              >
+
+              <!-- View Ads Button -->
+              <a
+                href="{{ url_for('view_ads', campaign_id=campaign.id, influencer_id=current_user.id) }}"
+                class="btn btn-primary btn-sm ml-2"
+                >View Ads</a
+              >
+
+              <!-- Delete Campaign Form -->
+              <form
+                action="{{ url_for('delete_campaign', campaign_id=campaign.id) }}"
+                method="post"
+                style="display: inline"
+              >
+                <button type="submit" class="btn btn-danger btn-sm">
+                  Delete
+                </button>
+              </form>
+
+              <!-- Update Campaign Button -->
+              <a
+                href="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
+                class="btn btn-secondary btn-sm ml-2"
+                >Update</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

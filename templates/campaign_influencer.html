@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campaign Influencers</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="container mt-5">
+    <h1>Campaign Influencers</h1>
+
+    <!-- Table of Influencers -->
+    {% if influencers %}
+    <div class="mt-4">
+      <h2>Influencers</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Niche</th>
+            <th>Reach</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for influencer in influencers %}
+          <tr>
+            <td>{{ influencer.id }}</td>
+            <td>{{ influencer.name }}</td>
+            <td>{{ influencer.category }}</td>
+            <td>{{ influencer.niche }}</td>
+            <td>{{ influencer.reach }}</td>
+            <td>
+              <a
+                href="{{ url_for('ad_requirements', campaign_id=campaign.id, influencer_id=influencer.id) }}"
+                class="btn btn-success btn-sm"
+                >Send Request</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="mt-4">
+      <p>No influencers found.</p>
+    </div>
+    {% endif %}
+
+    <!-- Back Button -->
+    <div class="mt-4">
+      <a href="{{ url_for('show_campaign') }}" class="btn btn-secondary"
+        >Back to Campaigns</a
+      >
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Campaigns</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+      <button class="btn btn-secondary" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+    <div class="container mt-5">
+      <h1 class="text-center">Campaigns</h1>
+
+      <!-- Search Form -->
+      <form
+        action="{{ url_for('search_campaigns') }}"
+        method="GET"
+        class="mb-4"
+      >
+        <div class="form-row">
+          <div class="col-md-4">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="Search by Name"
+            />
+          </div>
+          <div class="col-md-4">
+            <input
+              type="text"
+              name="niche"
+              class="form-control"
+              placeholder="Search by Niche"
+            />
+          </div>
+          <div class="col-md-2">
+            <input
+              type="number"
+              name="budget_min"
+              class="form-control"
+              placeholder="Min Budget"
+            />
+          </div>
+          <div class="col-md-2">
+            <input
+              type="number"
+              name="budget_max"
+              class="form-control"
+              placeholder="Max Budget"
+            />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
+      </form>
+
+      <!-- Display Campaigns -->
+      {% if campaigns %}
+      <div class="row mt-4">
+        {% for campaign in campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ campaign.start_date.strftime('%Y-%m-%d') }} to {{
+                campaign.end_date.strftime('%Y-%m-%d') }}
+              </h6>
+              <p class="card-text">{{ campaign.description }}</p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Visibility:</strong> {{ campaign.visibility }}
+              </p>
+              <p class="card-text">
+                <strong>Goals:</strong> {{ campaign.goals }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ campaign.niche }}
+              </p>
+
+              <!-- View Ads Button -->
+              {% if influencers %}
+              <a
+                href="{{ url_for('influencer_ads', campaign_id=campaign.id, influencer_id=influencers.id) }}"
+                class="btn btn-primary btn-sm ml-2"
+                >View Ads</a
+              >
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No campaigns found.</p>
+      {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

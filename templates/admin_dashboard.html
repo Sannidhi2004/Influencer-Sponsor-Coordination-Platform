@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 30px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.8);
+        margin-bottom: 20px;
+      }
+      .card-header {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 1.2rem;
+        color: #333;
+      }
+      .card-body {
+        padding: 10px;
+      }
+      .chart-container {
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        max-width: 700px; /* Adjust size if needed */
+        margin: auto;
+      }
+      canvas {
+        height: 400px; /* Adjust size as needed */
+        width: 600px; /* Adjust size as needed */
+      }
+      .navbar {
+        margin-bottom: 2rem;
+        background-color: #343a40;
+      }
+      .navbar-brand,
+      .nav-link {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #fff !important;
+      }
+      .navbar-brand:hover,
+      .nav-link:hover {
+        color: #ddd !important;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <a class="navbar-brand" href="#">Admin Dashboard</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin_profile') }}"
+              >Profile</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('admin_find') }}">Flag</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <!-- Donut Chart Card -->
+      <div class="card">
+        <div class="card-header">Influencers vs Sponsors</div>
+        <div class="card-body chart-container">
+          <canvas id="donutChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Pie Chart Card -->
+      <div class="card">
+        <div class="card-header">Ad Status Overview</div>
+        <div class="card-body chart-container">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 3D Pie Chart Card for Campaigns -->
+      <div class="card">
+        <div class="card-header">Campaign Visibility</div>
+        <div class="card-body chart-container">
+          <canvas id="campaignVisibilityChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 3D Pie Chart Card for Campaign Completion -->
+      <div class="card">
+        <div class="card-header">Campaign Completion Status</div>
+        <div class="card-body chart-container">
+          <canvas id="campaignCompletionChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Donut Chart
+      var ctxDonut = document.getElementById('donutChart').getContext('2d');
+      new Chart(ctxDonut, {
+          type: 'doughnut',
+          data: {
+              labels: ['Influencers', 'Sponsors'],
+              datasets: [{
+                  label: 'Influencers vs Sponsors',
+                  data: [{{ influencers_count }}, {{ sponsors_count }}],
+                  backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                  borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+                  borderWidth: 2
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                          font: {
+                              weight: 'bold'
+                          }
+                      }
+                  }
+              }
+          }
+      });
+
+      // Pie Chart for Ad Status
+      var ctxPie = document.getElementById('pieChart').getContext('2d');
+      new Chart(ctxPie, {
+          type: 'pie',
+          data: {
+              labels: ['Accepted', 'Rejected', 'Completed', 'Pending','Transaction Done', 'Other'],
+              datasets: [{
+                  label: 'Ad Statuses',
+                  data: [{{ ad_status_counts['Accepted'] }},
+                         {{ ad_status_counts['Rejected'] }},
+                         {{ ad_status_counts['Completed'] }},
+                         {{ ad_status_counts['Pending'] }},
+                         {{ ad_status_counts['Transaction Done'] }},
+                         {{ ad_status_counts['Other'] }}],
+                  backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 159, 64, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(153, 102, 255, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                  borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 159, 64, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 99, 132, 1)'],
+                  borderWidth: 2
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                          font: {
+                              weight: 'bold'
+                          }
+                      }
+                  }
+              }
+          }
+      });
+
+      // 3D Pie Chart for Campaign Visibility
+      var ctxVisibility = document.getElementById('campaignVisibilityChart').getContext('2d');
+      new Chart(ctxVisibility, {
+          type: 'doughnut', // 3D effect is simulated with doughnut
+          data: {
+              labels: ['Private', 'Public'],
+              datasets: [{
+                  label: 'Campaign Visibility',
+                  data: [{{ private_campaigns_count }}, {{ public_campaigns_count }}],
+                  backgroundColor: ['rgba(255, 205, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+                  borderColor: ['rgba(255, 205, 86, 1)', 'rgba(75, 192, 192, 1)'],
+                  borderWidth: 2
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                          font: {
+                              weight: 'bold'
+                          }
+                      }
+                  }
+              }
+          }
+      });
+
+      // 3D Pie Chart for Campaign Completion Status
+      var ctxCompletion = document.getElementById('campaignCompletionChart').getContext('2d');
+      new Chart(ctxCompletion, {
+          type: 'doughnut', // 3D effect is simulated with doughnut
+          data: {
+              labels: ['Completed', 'Incomplete'],
+              datasets: [{
+                  label: 'Campaign Completion Status',
+                  data: [{{ completed_campaigns_count }}, {{ incomplete_campaigns_count }}],
+                  backgroundColor: ['rgba(153, 102, 255, 0.6)', 'rgba(255, 99, 132, 0.6)'],
+                  borderColor: ['rgba(153, 102, 255, 1)', 'rgba(255, 99, 132, 1)'],
+                  borderWidth: 2
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                          font: {
+                              weight: 'bold'
+                          }
+                      }
+                  }
+              }
+          }
+      });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

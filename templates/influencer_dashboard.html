@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Influencer Dashboard</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+    <style>
+      body {
+        background: url("/static/bg.jpg") no-repeat center center fixed;
+        background-size: cover;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.8);
+        margin-top: 20px;
+      }
+      .card-header {
+        font-weight: bold;
+      }
+      .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4rem;
+        color: rgba(255, 255, 255, 0.3);
+        pointer-events: none;
+      }
+      .profile-picture {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Influencer Dashboard</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/create_influencer">Edit profile</a>
+          </li>
+          {% if influencer %} {% if ad_requests and ad_requests|length > 0 %}
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              href="{{ url_for('influencer_priv_adrequests', influencer_id=influencer.id) }}"
+              >Ad Requests</a
+            >
+          </li>
+          {% endif %} {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="/influencer_campaign">Public Campaigns</a>
+          </li>
+
+          {% if influencer %}
+          <li class="nav-item">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('active_campaigns', influencer_id=influencer.id) }}">Active campaigns</a>
+          </li>
+          
+          </li>
+          {% endif %}
+        
+
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('stats', influencer_id=influencer.id) }}">Statistics</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    {% if influencer %}
+    <div class="container mt-4">
+      <div class="watermark">Influencer</div>
+      <h1 class="text-center text-white">Welcome, {{ influencer.name }}!</h1>
+      <p class="text-center text-white">Let’s unite to create amazing content and drive success together!</p>
+
+      <div class="card">
+        <div class="card-header">Your Profile</div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 offset-md-4 text-center">
+              {% if influencer.profile_picture %}
+              <img
+                src="{{ url_for('static', filename='uploads/' + influencer.profile_picture) }}"
+                alt="Profile Picture"
+                class="profile-picture"
+              />
+              {% else %}
+              <p>No profile picture uploaded</p>
+              {% endif %}
+            </div>
+          </div>
+          <p class="card-text"><strong>Name:</strong> {{ influencer.name }}</p>
+          <p class="card-text">
+            <strong>Platform:</strong> {{ influencer.platform }}
+          </p>
+          <p class="card-text">
+            <strong>Niche:</strong> {{ influencer.niche }}
+          </p>
+          <p class="card-text">
+            <strong>Reach:</strong> {{ influencer.reach }}
+          </p>
+          <p class="card-text">
+            <strong>Rating:</strong>
+            <span class="rating">
+              {% for i in range(1, 6) %}
+                <i class="fa fa-star {% if i <= rating %}checked{% endif %}"></i>
+              {% endfor %}
+            </span>
+          </p>
+          <p class="card-text">
+            <strong>Total Earnings:</strong> ${{ total_earnings | round(2) }}
+          </p>
+        
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <p class="text-center text-white">No influencer data available.</p>
+    {% endif %}
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK..."
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

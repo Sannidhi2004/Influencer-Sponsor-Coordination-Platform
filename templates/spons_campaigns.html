@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Campaigns</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="container mt-5">
+    <h1>Do you wish to create a new campaign?</h1>
+    <form action="{{ url_for('create_campaign') }}" method="post" class="mb-4">
+      <div class="form-group">
+        <label for="campaignName">Campaign Name:</label>
+        <input
+          type="text"
+          id="campaignnName"
+          name="name"
+          class="form-control"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Create campaign</button>
+    </form>
+
+    <div>
+      <h2>Campaigns</h2>
+      <ul class="list-group">
+        {% for campaign in campaign %}
+        <li
+          class="list-group-item d-flex justify-content-between align-items-center"
+        >
+          {{ campaign.name }}
+          <div>
+            <form
+              action="{{ url_for('delete_campaign', campaign_id=campaign.id) }}"
+              method="post"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-danger btn-sm">
+                Delete
+              </button>
+            </form>
+            <a
+              href="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
+              class="btn btn-secondary btn-sm ml-2"
+              >Update</a
+            >
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mt-4">
+      <a href="{{ url_for('show_campaign') }}" class="btn btn-success"
+        >Show Tables</a
+      >
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

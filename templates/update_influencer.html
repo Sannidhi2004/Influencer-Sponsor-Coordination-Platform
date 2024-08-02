@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Influencer</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body class="container mt-5">
+    <h1>Update Influencer</h1>
+    <form
+      method="POST"
+      action="{{ url_for('update_influencer', influencer_id=influencer.id) }}"
+    >
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="{{ influencer.name }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="category">Category:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="category"
+          name="category"
+          value="{{ influencer.category }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="niche">Niche:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="niche"
+          name="niche"
+          value="{{ influencer.niche }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="reach">Reach:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="reach"
+          name="reach"
+          value="{{ influencer.reach }}"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Update Influencer</button>
+    </form>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

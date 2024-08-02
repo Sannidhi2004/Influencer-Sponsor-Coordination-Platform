@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Set up your profile!</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="container mt-5">
+    <h1>Set up your profile!</h1>
+
+    <!-- Form to create a new influencer -->
+    <form
+      action="{{ url_for('create_influencer') }}"
+      method="post"
+      enctype="multipart/form-data"
+      class="mb-4"
+    >
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="platform">Platform:</label>
+        <input
+          type="text"
+          id="platform"
+          name="platform"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="niche">Niche:</label>
+        <input
+          type="text"
+          id="niche"
+          name="niche"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="reach">Reach:</label>
+        <input
+          type="text"
+          id="reach"
+          name="reach"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="profile_picture">Profile Picture:</label>
+        <input
+          type="file"
+          id="profile_picture"
+          name="profile_picture"
+          class="form-control-file"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Set up profile</button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <!-- Include Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .login-form {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .btn-custom {
+        width: 48%;
+      }
+      .btn-block-custom {
+        width: 100%;
+      }
+      .welcome-text {
+        font-family: "Arial", sans-serif;
+        font-weight: bold;
+        color: #333;
+      }
+      .register-text {
+        font-family: "Arial", sans-serif;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center my-4 welcome-text">Welcome to the Login Page!</h1>
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <form action="/login" method="post" class="login-form">
+            <div class="form-group">
+              <label for="username">Username:</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="role">Role:</label>
+              <select id="role" name="role" class="form-control" required>
+                <option value="Influencer">Influencer</option>
+                <option value="Sponsor">Sponsor</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </div>
+            <div class="form-group text-center">
+              <input
+                type="submit"
+                value="Login"
+                class="btn btn-primary btn-block btn-block-custom"
+              />
+            </div>
+          </form>
+          <h3 class="text-center mt-4 register-text">
+            If you haven't registered yet, register now.
+          </h3>
+          <div class="text-center">
+            <a href="/influencer_reg" class="btn btn-info btn-custom mb-2"
+              >Influencer Registration</a
+            >
+            <a href="/sponsor_reg" class="btn btn-success btn-custom mb-2"
+              >Sponsor Registration</a
+            >
+            <!-- <a href="/admin_reg" class="btn btn-warning btn-custom mb-2"
+              >Admin Registration</a
+            > -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGaP1yYzz2cI6i7Q5b6HMTIl+1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

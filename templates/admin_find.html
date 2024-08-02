@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .card-header {
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+      .card-title {
+        font-size: 1.2rem;
+        color: #333;
+      }
+      .card-text {
+        color: #555;
+      }
+      .card:hover {
+        transform: scale(1.02);
+        transition: transform 0.2s;
+      }
+      .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        color: #fff;
+      }
+      .btn-warning:hover {
+        background-color: #e0a800;
+        color: #fff;
+      }
+      .status {
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+      .container {
+        margin-top: 30px;
+      }
+      .section-heading {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+      }
+      .section-divider {
+        border-top: 1px solid #e0e0e0;
+        margin: 20px 0;
+      }
+      .navbar {
+        margin-bottom: 2rem;
+        background-color: #343a40;
+      }
+      .navbar-brand,
+      .nav-link {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #fff !important;
+      }
+      .navbar-brand:hover,
+      .nav-link:hover {
+        color: #ddd !important;
+      }
+      .go-back-btn {
+        margin-left: 0.5cm;
+      }
+    </style>
+    <title>Find - Admin</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary go-back-btn" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+
+    <div class="container mt-4">
+      <div class="text-center mb-4">
+        <h1 class="display-4">Flag</h1>
+      </div>
+
+      <div>
+        <div class="section-heading">Influencers</div>
+        <div class="section-divider"></div>
+        <div class="row">
+          {% for influencer in influencers %}
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ influencer.name }}</h5>
+                <p class="card-text">Platform: {{ influencer.platform }}</p>
+                <p class="card-text">Niche: {{ influencer.niche }}</p>
+                <p class="card-text">Reach: {{ influencer.reach }}</p>
+                <a
+                  href="{{ url_for('view_influencer', influencer_id=influencer.id) }}"
+                  class="btn btn-primary"
+                  >View</a
+                >
+                {% if 'Influencer_' ~ influencer.id in flagged_item_ids %}
+                <form
+                  action="{{ url_for('remove_flag', flag_id=flagged_item_ids['Influencer_' ~ influencer.id]) }}"
+                  method="POST"
+                  class="mt-2"
+                >
+                  <button type="submit" class="btn btn-danger">
+                    Remove Flag
+                  </button>
+                </form>
+                {% else %}
+                <form
+                  action="{{ url_for('flag_item', item_type='Influencer', item_id=influencer.id) }}"
+                  method="post"
+                  class="mt-2"
+                >
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="reason"
+                      placeholder="Reason for flagging"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-warning">Flag</button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="section-divider"></div>
+      </div>
+
+      <div>
+        <div class="section-heading">Sponsors</div>
+        <div class="section-divider"></div>
+        <div class="row">
+          {% for sponsor in sponsors %}
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ sponsor.username }}</h5>
+                <a
+                  href="{{ url_for('view_sponsor', sponsor_id=sponsor.id) }}"
+                  class="btn btn-primary"
+                  >View</a
+                >
+                {% if 'Sponsor_' ~ sponsor.id in flagged_item_ids %}
+                <form
+                  action="{{ url_for('remove_flag', flag_id=flagged_item_ids['Sponsor_' ~ sponsor.id]) }}"
+                  method="POST"
+                  class="mt-2"
+                >
+                  <button type="submit" class="btn btn-danger">
+                    Remove Flag
+                  </button>
+                </form>
+                {% else %}
+                <form
+                  action="{{ url_for('flag_item', item_type='Sponsor', item_id=sponsor.id) }}"
+                  method="post"
+                  class="mt-2"
+                >
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="reason"
+                      placeholder="Reason for flagging"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-warning">Flag</button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="section-divider"></div>
+      </div>
+
+      <div>
+        <div class="section-heading">Campaigns</div>
+        <div class="section-divider"></div>
+        <div class="row">
+          {% for campaign in campaigns %}
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{{ campaign.name }}</h5>
+                <p class="card-text">Description: {{ campaign.description }}</p>
+                <p class="card-text">Budget: ${{ campaign.budget }}</p>
+                <p class="card-text">
+                  Start Date: {{ campaign.start_date.strftime('%Y-%m-%d') }}
+                </p>
+                <p class="card-text">
+                  End Date: {{ campaign.end_date.strftime('%Y-%m-%d') }}
+                </p>
+                <a
+                  href="{{ url_for('view_campaign', campaign_id=campaign.id) }}"
+                  class="btn btn-primary"
+                  >View</a
+                >
+                {% if 'Campaign_' ~ campaign.id in flagged_item_ids %}
+                <form
+                  action="{{ url_for('remove_flag', flag_id=flagged_item_ids['Campaign_' ~ campaign.id]) }}"
+                  method="POST"
+                  class="mt-2"
+                >
+                  <button type="submit" class="btn btn-danger">
+                    Remove Flag
+                  </button>
+                </form>
+                {% else %}
+                <form
+                  action="{{ url_for('flag_item', item_type='Campaign', item_id=campaign.id) }}"
+                  method="post"
+                  class="mt-2"
+                >
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="reason"
+                      placeholder="Reason for flagging"
+                      required
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-warning">Flag</button>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="section-divider"></div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

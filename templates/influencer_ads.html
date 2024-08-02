@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>View Ads</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+      <button class="btn btn-secondary" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+
+    <div class="container mt-4">
+      <h1>Ads for {{ campaign.name }}</h1>
+      <div class="row">
+        {% for ad in ads %}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Messages</h5>
+              <p class="card-text">{{ ad.messages }}</p>
+              <h5 class="card-title">Requirements</h5>
+              <p class="card-text">{{ ad.requirements }}</p>
+              <h5 class="card-title">Payment Amount</h5>
+              <p class="card-text">${{ ad.payment_amount }}</p>
+              <h5 class="card-title">Status</h5>
+              <p class="card-text">{{ ad.status }}</p>
+
+              <!-- Accept/Reject Form -->
+              <form
+                action="{{ url_for('accept_ad11', ad_id=ad.id) }}"
+                method="POST"
+                class="d-inline"
+              >
+                <button type="submit" class="btn btn-success btn-sm">
+                  Accept
+                </button>
+              </form>
+              <form
+                action="{{ url_for('reject_ad11', ad_id=ad.id) }}"
+                method="POST"
+                class="d-inline"
+              >
+                <button type="submit" class="btn btn-danger btn-sm">
+                  Reject
+                </button>
+              </form>
+
+              <!-- Negotiate Form -->
+              <button
+                class="btn btn-warning btn-sm"
+                data-toggle="modal"
+                data-target="#negotiateModal{{ ad.id }}"
+              >
+                Negotiate
+              </button>
+
+              <!-- Negotiate Modal -->
+              <div
+                class="modal fade"
+                id="negotiateModal{{ ad.id }}"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="negotiateModalLabel{{ ad.id }}"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5
+                        class="modal-title"
+                        id="negotiateModalLabel{{ ad.id }}"
+                      >
+                        Negotiate Ad Status
+                      </h5>
+                      <button
+                        type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form
+                        method="POST"
+                        action="{{ url_for('negotiate_ad11', ad_id=ad.id) }}"
+                      >
+                        <div class="form-group">
+                          <label for="newStatus">New Status</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="newStatus"
+                            name="new_status"
+                            value="Hi, I would like to negotiate"
+                            required
+                          />
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                          Submit
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

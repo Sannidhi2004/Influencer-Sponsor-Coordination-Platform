@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Requirements</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="container mt-5">
+    <h1>Add Requirements for Influencer</h1>
+    <form
+      action="{{ url_for('ad_requirements', influencer_id=influencer_id, campaign_id=campaign_id) }}"
+      method="POST"
+    >
+      <input type="hidden" name="campaign_id" value="{{ campaign_id }}" />
+      <!-- Hidden field to pass campaign_id -->
+      <div class="form-group">
+        <label for="requirements">Requirements</label>
+        <textarea
+          class="form-control"
+          id="requirements"
+          name="requirements"
+          rows="4"
+          required
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="messages">Message</label>
+        <textarea
+          class="form-control"
+          id="messages"
+          name="messages"
+          rows="2"
+          required
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="payment_amount">Payment Amount</label>
+        <input
+          type="number"
+          class="form-control"
+          id="payment_amount"
+          name="payment_amount"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <!-- Back Button -->
+    <div class="mt-4">
+      <a
+        href="{{ url_for('campaign_influencer',  campaign_id=campaign_id, influencer_id=influencer_id) }}"
+        class="btn btn-secondary"
+      >
+        Back to Influencers
+      </a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

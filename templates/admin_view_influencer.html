@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>View Influencer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .go-back-btn {
+        margin-left: 0.5cm;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary go-back-btn" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+    <div class="container my-5">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card">
+            <img
+              src="{{ url_for('static', filename='uploads/' + influencer.profile_picture) }}"
+              class="card-img-top img-fluid"
+              alt="Profile Picture"
+            />
+            <div class="card-body text-center">
+              <h5 class="card-title">{{ influencer.name }}</h5>
+              <p class="card-text">
+                <strong>Category:</strong> {{ influencer.category }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ influencer.niche }}
+              </p>
+              <p class="card-text">
+                <strong>Reach:</strong> {{ influencer.reach }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-9">
+          <h3>Active Ads</h3>
+          <div class="list-group mb-4">
+            {% for ad in active_ads %}
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ ad.campaign.name }}</h5>
+                <small
+                  >{{ ad.campaign.start_date }} - {{ ad.campaign.end_date
+                  }}</small
+                >
+              </div>
+              <p class="mb-1">{{ ad.messages }}</p>
+              <small>Status: {{ ad.status }}</small>
+            </a>
+            {% else %}
+            <p class="text-muted">No active ads found.</p>
+            {% endfor %}
+          </div>
+
+          <h3>Completed Ads</h3>
+          <div class="list-group mb-4">
+            {% for ad in completed_ads %}
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ ad.campaign.name }}</h5>
+                <small
+                  >{{ ad.campaign.start_date }} - {{ ad.campaign.end_date
+                  }}</small
+                >
+              </div>
+              <p class="mb-1">{{ ad.messages }}</p>
+              <small>Status: {{ ad.status }}</small>
+            </a>
+            {% else %}
+            <p class="text-muted">No completed ads found.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

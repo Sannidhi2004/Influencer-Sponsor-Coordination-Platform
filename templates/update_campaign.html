@@ -1,0 +1,122 @@
+<!-- templates/update_campaign.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Campaign</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <!-- Optional: Include Bootstrap Datepicker CSS if you're using it -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    />
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    </nav>
+    <div  class="container mt-5">
+    <h1>Update Campaign</h1>
+    <form
+      method="POST"
+      action="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
+    >
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="{{ campaign.name }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          name="description"
+          value="{{ campaign.description }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="start_date">Start Date:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="start_date"
+          name="start_date"
+          value="{{ campaign.start_date.strftime('%Y-%m-%d') }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="end_date">End Date:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="end_date"
+          name="end_date"
+          value="{{ campaign.end_date.strftime('%Y-%m-%d') }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="budget">Budget:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="budget"
+          name="budget"
+          value="{{ campaign.budget }}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="visibility">Visibility:</label>
+        <select id="visibility" name="visibility" class="form-control" required>
+          <option value="Public" {% if campaign.visibility == 'Public' %} selected {% endif %}>Public</option>
+          <option value="Private" {% if campaign.visibility == 'Private' %} selected {% endif %}>Private</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="goals">Goals:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="goals"
+          name="goals"
+          value="{{ campaign.goals }}"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Update Campaign</button>
+    </form>
+  </div>
+
+    <!-- Bootstrap and Datepicker JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- Optional: Include Bootstrap Datepicker JS if needed -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        // Initialize datepicker if needed
+        $("#start_date, #end_date").datepicker({
+          format: "yyyy-mm-dd",
+          autoclose: true,
+        });
+      });
+    </script>
+  </body>
+</html>

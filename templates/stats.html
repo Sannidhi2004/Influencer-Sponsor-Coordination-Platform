@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Statistics</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        background: url("/static/bg.jpg") no-repeat center center fixed;
+        background-size: cover;
+      }
+      .container {
+        margin-top: 30px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.8);
+      }
+      .card-header {
+        font-weight: bold;
+      }
+      canvas {
+        height: 100px; /* Adjust the height as needed */
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <button class="btn btn-secondary" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">Statistics for {{ influencer.name }}</div>
+        <div class="card-body">
+          <p>
+            <strong>Total Ad Requests Received:</strong> {{ ad_requests|length
+            }}
+          </p>
+          <p>
+            <strong>Completed Ad Requests:</strong> {{ completed_requests|length
+            }}
+          </p>
+          <p><strong>Total Earnings:</strong> ${{ payment_received }}</p>
+
+          <!-- Line Chart -->
+          <div class="mb-4">
+            <canvas id="lineChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Line Chart
+      var ctxLine = document.getElementById('lineChart').getContext('2d');
+      new Chart(ctxLine, {
+        type: 'line',
+        data: {
+          labels: ['Ad Requests Received', 'Completed Ad Requests'],
+          datasets: [{
+            label: 'Ad Requests',
+            data: {{ completed_vs_received|tojson }},
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',  // Darker background color
+            borderColor: 'rgba(54, 162, 235, 0.99)',      // Darker border color
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>Add Ad</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    </nav>
+    <div class="container mt-4">
+      <h1 class="mb-4">Add Ad for {{ campaign.name }}</h1>
+      <form
+        action="{{ url_for('add_ads', campaign_id=campaign.id) }}"
+        method="POST"
+      >
+        <div class="form-group">
+          <label for="messages">Messages:</label>
+          <input
+            type="text"
+            class="form-control"
+            name="messages"
+            id="messages"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="requirements">Requirements:</label>
+          <input
+            type="text"
+            class="form-control"
+            name="requirements"
+            id="requirements"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="payment_amount">Payment Amount:</label>
+          <input
+            type="number"
+            class="form-control"
+            name="payment_amount"
+            id="payment_amount"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <select class="form-control" name="status" id="status" required>
+            <option value="Pending">Pending</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Ad</button>
+      </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

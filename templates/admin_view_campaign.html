@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>View Campaign</title>
+    <style>
+      .campaign-card,
+      .ad-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+      .campaign-card:hover,
+      .ad-card:hover {
+        transform: scale(1.02);
+      }
+      .navbar-nav .nav-item .nav-link {
+        padding: 0.5rem 1rem;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
+      .go-back-btn {
+        margin-left: 0.5cm;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary go-back-btn" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+    <div class="container mt-4">
+      <h1 class="mb-4">Campaign Details</h1>
+      <div class="card mb-4 campaign-card">
+        <div class="card-body">
+          <h5 class="card-title">{{ campaign.name }}</h5>
+          <p class="card-text">
+            <strong>Description:</strong> {{ campaign.description }}
+          </p>
+          <p class="card-text">
+            <strong>Budget:</strong> ${{ campaign.budget }}
+          </p>
+          <p class="card-text">
+            <strong>Start Date:</strong> {{
+            campaign.start_date.strftime('%Y-%m-%d') }}
+          </p>
+          <p class="card-text">
+            <strong>End Date:</strong> {{ campaign.end_date.strftime('%Y-%m-%d')
+            }}
+          </p>
+        </div>
+      </div>
+
+      <h2 class="mb-4">Ads</h2>
+      {% if ads %}
+      <div class="row">
+        {% for ad in ads %}
+        <div class="col-md-4 mb-4">
+          <div class="card ad-card">
+            <div class="card-body">
+              <h5 class="card-title">Ad ID: {{ ad.id }}</h5>
+              <p class="card-text">
+                <strong>Influencer ID:</strong> {{ ad.influencer_id }}
+              </p>
+              <p class="card-text">
+                <strong>Messages:</strong> {{ ad.messages }}
+              </p>
+              <p class="card-text">
+                <strong>Requirements:</strong> {{ ad.requirements }}
+              </p>
+              <p class="card-text">
+                <strong>Payment Amount:</strong> ${{ ad.payment_amount }}
+              </p>
+              <p class="card-text"><strong>Status:</strong> {{ ad.status }}</p>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="alert alert-info" role="alert">
+        No ads found for this campaign.
+      </div>
+      {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

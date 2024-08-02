@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Influencer Profile</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-5">{{ influencer.name }}'s Profile</h1>
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <img
+            src="{{ url_for('static', filename='uploads/' ~ influencer.profile_picture) }}"
+            alt="Profile Picture"
+            class="img-fluid rounded"
+          />
+        </div>
+        <div class="col-md-8">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <strong>Name:</strong> {{ influencer.name }}
+            </li>
+            <li class="list-group-item">
+              <strong>Platform:</strong> {{ influencer.platform }}
+            </li>
+            <li class="list-group-item">
+              <strong>Niche:</strong> {{ influencer.niche }}
+            </li>
+            <li class="list-group-item">
+              <strong>Reach:</strong> {{ influencer.reach }}
+            </li>
+          </ul>
+          <a
+            href="{{ url_for('update_influencer', influencer_id=influencer.id) }}"
+            class="btn btn-primary mt-3"
+            >Edit Profile</a
+          >
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>Completed Campaigns</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    </nav>
+
+    <div class="container mt-4">
+      <h1>Completed Campaigns</h1>
+      <div class="row">
+        {% if ads_with_transactions %} {% for item in ads_with_transactions %}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">Campaign: {{ item.ad.campaign.name }}</h5>
+              <p><strong>Messages:</strong> {{ item.ad.messages }}</p>
+              <p><strong>Requirements:</strong> {{ item.ad.requirements }}</p>
+              <p>
+                <strong>Payment Amount:</strong> ${{ item.ad.payment_amount }}
+              </p>
+              <p>
+                <strong>Status:</strong>
+                {% if item.transaction and item.transaction.status ==
+                'Transaction Done' %}
+                <span style="color: red">Payment Done</span>
+                {% else %} {{ item.ad.status }} {% endif %}
+              </p>
+              {% if not item.transaction or item.transaction.status !=
+              'Transaction Done' %}
+              <a
+                href="{{ url_for('transaction', ad_id=item.ad.id) }}"
+                class="btn btn-primary"
+                >Pay</a
+              >
+              {% else %}
+              <button class="btn btn-secondary" disabled>Paid</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <p>No completed campaigns found.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

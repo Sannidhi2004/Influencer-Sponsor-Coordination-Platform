@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>View Ads</title>
+    <style>
+      .card {
+        margin-bottom: 20px;
+      }
+      .btn-group {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    </nav>
+
+    <div class="container mt-4">
+      <h1 class="mb-4">Ads for Campaign: {{ campaign.name }}</h1>
+
+      {% if ads %}
+      <div class="row">
+        {% for ad in ads %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">
+                Ad for Influencer ID: {{ ad.influencer_id }}
+              </h5>
+              <p class="card-text">
+                <strong>Messages:</strong> {{ ad.messages }}
+              </p>
+              <p class="card-text">
+                <strong>Requirements:</strong> {{ ad.requirements }}
+              </p>
+              <p class="card-text">
+                <strong>Payment Amount:</strong> ${{ ad.payment_amount }}
+              </p>
+              <p class="card-text"><strong>Status:</strong> {{ ad.status }}</p>
+              <div class="btn-group" role="group" aria-label="Ad actions">
+                <a
+                  href="{{ url_for('update_ad', ad_id=ad.id) }}"
+                  class="btn btn-warning"
+                  >Update</a
+                >
+                <form
+                  action="{{ url_for('delete_ad', ad_id=ad.id) }}"
+                  method="POST"
+                  style="display: inline"
+                >
+                  <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>No ads found for this campaign.</p>
+      {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <title>View Sponsor</title>
+    <style>
+      .campaign-card {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+      }
+      .campaign-card:hover {
+        transform: scale(1.02);
+      }
+      .navbar-nav .nav-item .nav-link {
+        padding: 0.5rem 1rem;
+      }
+      .go-back-btn {
+        margin-left: 0.5cm;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary go-back-btn" onclick="history.back()">
+        Go Back
+      </button>
+    </nav>
+
+    <div class="container mt-4">
+      <h1 class="mb-4">Sponsor Profile</h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">{{ sponsor.username }}</h5>
+        </div>
+      </div>
+
+      <h2 class="mb-4">Public Campaigns</h2>
+      <div class="row">
+        {% if public_campaigns %} {% for campaign in public_campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card campaign-card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <p class="card-text">
+                <strong>Description:</strong> {{ campaign.description }}
+              </p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Start Date:</strong> {{
+                campaign.start_date.strftime('%Y-%m-%d') }}
+              </p>
+              <p class="card-text">
+                <strong>End Date:</strong> {{
+                campaign.end_date.strftime('%Y-%m-%d') }}
+              </p>
+              <a
+                href="{{ url_for('view_campaign', campaign_id=campaign.id) }}"
+                class="btn btn-primary"
+                >View Campaign</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="col-md-12">
+          <div class="alert alert-info" role="alert">
+            No public campaigns found.
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <h2 class="mb-4">Private Campaigns</h2>
+      <div class="row">
+        {% if private_campaigns %} {% for campaign in private_campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card campaign-card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <p class="card-text">
+                <strong>Description:</strong> {{ campaign.description }}
+              </p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Start Date:</strong> {{
+                campaign.start_date.strftime('%Y-%m-%d') }}
+              </p>
+              <p class="card-text">
+                <strong>End Date:</strong> {{
+                campaign.end_date.strftime('%Y-%m-%d') }}
+              </p>
+              <a
+                href="{{ url_for('view_campaign', campaign_id=campaign.id) }}"
+                class="btn btn-primary"
+                >View Campaign</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <div class="col-md-12">
+          <div class="alert alert-info" role="alert">
+            No private campaigns found.
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

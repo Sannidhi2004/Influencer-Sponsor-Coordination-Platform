@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sponsor Dashboard</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .content {
+        margin-top: 20px;
+      }
+      .gradient-bg {
+        background: linear-gradient(to right, #00b09b, #96c93d);
+        color: white;
+      }
+      .progress-bar-gradient {
+        background: linear-gradient(to right, #00b09b, #96c93d);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Sponsor Dashboard</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/sponsor_dashboard">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/create_campaign">Campaigns</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/completed_campaigns"
+              >Completed Campaigns</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="jumbotron">
+            <h1 class="display-4">Welcome, Sponsor!</h1>
+            <p class="lead">
+              Keep creating impactful campaigns and engaging with our talented
+              influencers. Together, we're driving success and innovation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Public Campaigns -->
+      <h2>Public Campaigns</h2>
+      <div class="row">
+        {% for campaign, progress in public_campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <p class="card-text">{{ campaign.description }}</p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ campaign.niche }}
+              </p>
+              <div class="progress mb-2">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  style="width: {{ progress }}%;"
+                  aria-valuenow="{{ progress }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  {{ progress }}%
+                </div>
+              </div>
+              <a
+                href="{{ url_for('view_ads', campaign_id=campaign.id) }}"
+                class="btn btn-primary"
+                >View Ads</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Private Campaigns -->
+      <h2>Private Campaigns</h2>
+      <div class="row">
+        {% for campaign, progress in private_campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <p class="card-text">{{ campaign.description }}</p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ campaign.niche }}
+              </p>
+              <div class="progress mb-2">
+                <div
+                  class="progress-bar"
+                  role="progressbar"
+                  style="width: {{ progress }}%;"
+                  aria-valuenow="{{ progress }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                >
+                  {{ progress }}%
+                </div>
+              </div>
+              <a
+                href="{{ url_for('view_ads', campaign_id=campaign.id) }}"
+                class="btn btn-primary"
+                >View Ads</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

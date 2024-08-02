@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Ad</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+      </nav>
+
+    <div class="container mt-5">
+
+    <h1>Update Ad</h1>
+
+
+    <form action="{{ url_for('update_ad', ad_id=ad.id) }}" method="post">
+        <div class="form-group">
+            <label for="messages">Messages:</label>
+            <input type="text" id="messages" name="messages" class="form-control" value="{{ ad.messages }}" required>
+        </div>
+        <div class="form-group">
+            <label for="requirements">Requirements:</label>
+            <input type="text" id="requirements" name="requirements" class="form-control" value="{{ ad.requirements }}" required>
+        </div>
+        <div class="form-group">
+            <label for="payment_amount">Payment Amount:</label>
+            <input type="number" id="payment_amount" name="payment_amount" class="form-control" value="{{ ad.payment_amount }}" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" name="status" class="form-control" required>
+                <option value="Pending" {% if ad.status == 'Pending' %} selected {% endif %}>Pending</option>
+                <option value="Accepted" {% if ad.status == 'Accepted' %} selected {% endif %}>Accepted</option>
+                <option value="Rejected" {% if ad.status == 'Rejected' %} selected {% endif %}>Rejected</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Ad</button>
+        <a href="{{ url_for('view_ads', campaign_id=ad.campaign_id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
