@@ -157,7 +157,6 @@ def create_influencer():
                 filename = secure_filename(profile_picture.filename)
                 profile_picture.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             else:
-                flash('Invalid file format', 'error')
                 return redirect(request.url)
 
         if influencer:
@@ -168,7 +167,7 @@ def create_influencer():
             if filename:
                 influencer.profile_picture = filename
         else:
-            new_influencer = Influencer(
+            influencer = Influencer(
                 user_id=current_user.id,
                 name=name,
                 platform=platform,
@@ -176,12 +175,104 @@ def create_influencer():
                 reach=reach,
                 profile_picture=filename
             )
-            db.session.add(new_influencer)
+            db.session.add(influencer)
+        
+        db.session.commit()
+        
+        if influencer is None:
+            return redirect(request.url)
+        
+        public_campaigns = Campaign.query.filter_by(visibility='Public').all()
+        for campaign in public_campaigns:
+            # Fetch existing ads for the campaign
+            existing_ads = Ad.query.filter_by(campaign_id=campaign.id).all()
+            for existing_ad in existing_ads:
+                # Ensure existing_ad is not None
+                if existing_ad:
+                    # Check if an ad already exists for this influencer and campaign to avoid duplicates
+                    ad_duplicate_check = Ad.query.filter_by(campaign_id=campaign.id, influencer_id=influencer.id).first()
+                    if not ad_duplicate_check:
+                        new_ad = Ad(
+                            campaign_id=campaign.id,
+                            influencer_id=influencer.id,
+                            messages=existing_ad.messages,
+                            requirements=existing_ad.requirements,
+                            payment_amount=existing_ad.payment_amount,
+                            status='Pending'  # Default status
+                        )
+                        db.session.add(new_ad)
         
         db.session.commit()
         return redirect(url_for('influencer_dashboard', influencer_id=current_user.id))
     
     return render_template('create_influencer.html')
+
+@app.route('/delete_influencer_account', methods=['POST'])
+@login_required
+def delete_influencer_account():
+    influencer = Influencer.query.filter_by(user_id=current_user.id).first()
+    
+    if influencer:
+        # Delete all ads related to this influencer
+        Ad.query.filter_by(influencer_id=influencer.id).delete()
+        
+        # Delete all transactions related to this influencer
+        Transaction.query.filter_by(influencer_id=influencer.id).delete()
+        
+        # Delete the influencer
+        db.session.delete(influencer)
+    
+    # Delete the user
+    user = User.query.get(current_user.id)
+    db.session.delete(user)
+    
+    db.session.commit()
+    
+    # Log out the user
+    logout_user()
+    
+    return redirect(url_for('login'))
+
+
+@app.route('/delete_sponsor/<int:sponsor_id>', methods=['POST'])
+@login_required
+def delete_sponsor(sponsor_id):
+    # Fetch the sponsor by the current logged-in user
+    sponsor = User.query.get_or_404(sponsor_id)
+
+    if sponsor is None:
+        # If no sponsor is found, return an error or redirect
+        return "Sponsor not found or not a sponsor", 404
+
+    # Fetch associated campaigns using the sponsor's ID
+    campaigns = Campaign.query.filter_by(user_id=sponsor.id).all()
+    
+    # Iterate through campaigns and their ads to delete associated transactions
+    for campaign in campaigns:
+        ads = Ad.query.filter_by(campaign_id=campaign.id).all()
+        for ad in ads:
+            # Fetch and delete associated transactions
+            transactions = Transaction.query.filter_by(ad_request_id=ad.id).all()
+            for transaction in transactions:
+                db.session.delete(transaction)
+            
+            # Delete the ad
+            db.session.delete(ad)
+        
+        # Delete the campaign
+        db.session.delete(campaign)
+    
+    # Finally, delete the sponsor
+    db.session.delete(sponsor)
+    
+    # Commit all changes
+    try:
+        db.session.commit()
+        return redirect(url_for('admin_profile'))
+    except Exception as e:
+        db.session.rollback()
+        return "An error occurred while deleting the sponsor", 500
+
 
 
 @app.route('/logout')
@@ -249,6 +340,7 @@ def sponsor_dashboard():
 @login_required
 def sponsor_dashboard():
     sponsor_id = current_user.id
+    sponsor_name = session.get('username')
     print(f"Current user ID: {current_user.id}")  # Debug print for current user ID
 
     public_campaigns = Campaign.query.filter_by(user_id=sponsor_id, visibility='Public').all()
@@ -273,7 +365,7 @@ def sponsor_dashboard():
     print("Public Campaigns:", public_campaigns)  # Debug print for public campaigns
     print("Private Campaigns:", private_campaigns)  # Debug print for private campaigns
 
-    return render_template('sponsor_dashboard.html', public_campaigns=public_campaigns_progress, private_campaigns=private_campaigns_progress, campaign=visible_campaigns)
+    return render_template('sponsor_dashboard.html', sponsor_name=sponsor_name, public_campaigns=public_campaigns_progress, private_campaigns=private_campaigns_progress, campaign=visible_campaigns)
 
 
 @app.route('/sponsor_find')
@@ -412,9 +504,18 @@ def update_campaign(campaign_id):
 @app.route('/campaign/delete/<int:campaign_id>', methods=["POST"])
 def delete_campaign(campaign_id):
     campaign = Campaign.query.get(campaign_id)
-    db.session.delete(campaign)
-    db.session.commit()
+    if campaign:
+        # Delete associated ads first
+        ads = Ad.query.filter_by(campaign_id=campaign_id).all()
+        for ad in ads:
+            db.session.delete(ad)
+        
+        # Then delete the campaign
+        db.session.delete(campaign)
+        db.session.commit()
+    
     return redirect(url_for('campaign'))
+
 
 
 #for creating ads of the private campaigns (for a specific influencer)
@@ -495,6 +596,10 @@ def add_ads(campaign_id):
 def view_ads(campaign_id):
     campaign = Campaign.query.get_or_404(campaign_id)
     ads = Ad.query.filter_by(campaign_id=campaign_id).all()
+    
+    for ad in ads:
+        influencer = Influencer.query.get(ad.influencer_id)
+        ad.influencer_name = influencer.name if influencer else 'Unknown'
     return render_template('view_ads.html', campaign=campaign, ads=ads)
 
 
@@ -666,7 +771,7 @@ def influencer_ads(campaign_id):
     # Ensure the influencer is found
     if influencer is None:
         # Handle the case where the user is not an influencer
-        flash('You are not associated with any influencer profile.', 'warning')
+
         return redirect(url_for('some_other_route'))
     
     print(f"Influencer ID: {influencer.id}")

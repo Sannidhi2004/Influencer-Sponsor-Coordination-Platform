@@ -32,7 +32,8 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">
-                Ad for Influencer ID: {{ ad.influencer_id }}
+                Ad for Influencer ID: {{ ad.influencer_id }} - {{
+                ad.influencer_name }}
               </h5>
               <p class="card-text">
                 <strong>Messages:</strong> {{ ad.messages }}
@@ -47,7 +48,7 @@
               <div class="btn-group" role="group" aria-label="Ad actions">
                 <a
                   href="{{ url_for('update_ad', ad_id=ad.id) }}"
-                  class="btn btn-warning"
+                  class="btn btn-warning mr-2"
                   >Update</a
                 >
                 <form

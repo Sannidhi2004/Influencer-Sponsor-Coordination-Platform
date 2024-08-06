@@ -9,58 +9,98 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <style>
+      .card {
+        width: 18rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+      .card:hover {
+        transform: translateY(-10px);
+      }
+      .card-img-top {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+      .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 20px;
+      }
+      .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      .card-text {
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+      .btn-sm {
+        padding: 0.5rem 1rem;
+      }
+    </style>
   </head>
-  <body class="container mt-5">
-    <h1>Campaign Influencers</h1>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+    </nav>
 
-    <!-- Table of Influencers -->
-    {% if influencers %}
-    <div class="mt-4">
-      <h2>Influencers</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Niche</th>
-            <th>Reach</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for influencer in influencers %}
-          <tr>
-            <td>{{ influencer.id }}</td>
-            <td>{{ influencer.name }}</td>
-            <td>{{ influencer.category }}</td>
-            <td>{{ influencer.niche }}</td>
-            <td>{{ influencer.reach }}</td>
-            <td>
+    <div class="container mt-5">
+      <h1>Campaign Influencers</h1>
+
+      {% if influencers %}
+      <div class="row mt-4">
+        {% for influencer in influencers %}
+        <div class="col-md-4">
+          <div class="card mb-4">
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ influencer.profile_picture) }}"
+              class="card-img-top"
+              alt="{{ influencer.name }}'s Profile Picture"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ influencer.name }}</h5>
+              <p class="card-text">
+                <strong>Category:</strong> {{ influencer.category }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ influencer.niche }}
+              </p>
+              <p class="card-text">
+                <strong>Reach:</strong> {{ influencer.reach }}
+              </p>
               <a
                 href="{{ url_for('ad_requirements', campaign_id=campaign.id, influencer_id=influencer.id) }}"
                 class="btn btn-success btn-sm"
                 >Send Request</a
               >
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-    <div class="mt-4">
-      <p>No influencers found.</p>
-    </div>
-    {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="mt-4">
+        <p>No influencers found.</p>
+      </div>
+      {% endif %}
 
-    <!-- Back Button -->
-    <div class="mt-4">
-      <a href="{{ url_for('show_campaign') }}" class="btn btn-secondary"
-        >Back to Campaigns</a
-      >
+      <!-- Back Button -->
+      <div class="mt-4">
+        <a href="{{ url_for('show_campaign') }}" class="btn btn-secondary"
+          >Back to Campaigns</a
+        >
+      </div>
     </div>
-
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

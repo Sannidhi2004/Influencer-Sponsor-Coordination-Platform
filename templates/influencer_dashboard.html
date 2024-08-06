@@ -9,10 +9,21 @@
       rel="stylesheet"
     />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
       body {
         background: url("/static/bg.jpg") no-repeat center center fixed;
         background-size: cover;
+      }
+      .navbar {
+        background: rgba(255, 255, 255, 0.8) !important;
+      }
+      .nav-item:hover .nav-link {
+        transform: scale(1.1);
       }
       .card {
         background: rgba(255, 255, 255, 0.8);
@@ -21,20 +32,32 @@
       .card-header {
         font-weight: bold;
       }
-      .watermark {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 4rem;
-        color: rgba(255, 255, 255, 0.3);
-        pointer-events: none;
-      }
+      
       .profile-picture {
         max-width: 200px;
         max-height: 200px;
         border-radius: 50%;
         object-fit: cover;
+        
+        
+      }
+      .footer {
+        background: rgba(255, 255, 255, 0.5);
+        color: black;
+        padding: 4px 0;
+        text-align: center;
+        margin-top: 2cm;
+        bottom: 0;
+        width: 100%;
+        font-size: 0.6rem;
+      }
+      .footer a {
+        color: black;
+        margin: 0 10px;
+        font-size: 1.2rem;
+      }
+      .footer a:hover {
+        color: #606060;
       }
     </style>
   </head>
@@ -84,6 +107,16 @@
             <a class="nav-link" href="{{ url_for('stats', influencer_id=influencer.id) }}">Statistics</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link">
+            <form id="delete-account-form" action="{{ url_for('delete_influencer_account') }}" method="POST" style="display: inline;">
+              <button type="button" class="nav-link btn btn-link text-danger" style="padding: 0; border: none; cursor: pointer;" onclick="confirmDelete()">
+                Delete Account
+              </button>
+            </form>
+          </a>
+          </li>
+          
+          <li class="nav-item">
             <a class="nav-link" href="/logout">Logout</a>
           </li>
         </ul>
@@ -92,7 +125,7 @@
 
     {% if influencer %}
     <div class="container mt-4">
-      <div class="watermark">Influencer</div>
+     
       <h1 class="text-center text-white">Welcome, {{ influencer.name }}!</h1>
       <p class="text-center text-white">Let’s unite to create amazing content and drive success together!</p>
 
@@ -141,6 +174,25 @@
     <p class="text-center text-white">No influencer data available.</p>
     {% endif %}
 
+    <footer class="footer">
+      <div>
+        <a href="#" title="Mail"><i class="fas fa-envelope"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+      <div>
+        &copy; 2024 Influencer Dashboard
+      </div>
+    </footer>
+
+    <script>
+      function confirmDelete() {
+        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+          document.getElementById('delete-account-form').submit();
+        }
+      }
+    </script>
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK..."
