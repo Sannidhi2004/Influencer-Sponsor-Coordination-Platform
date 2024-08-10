@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Ad</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <button class="btn btn-primary" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i> Go Back
+        </button>
+        <button class="btn btn-danger ml-3" onclick="window.location.href='/sponsor_dashboard'">
+            <i class="fas fa-home"></i> Dashboard
+        </button>
+    </nav>
+
+    <div class="container mt-5">
+        <h1>Update Ad</h1>
+
+        <form action="{{ url_for('update_negotiated_ad', ad_id=ad.id) }}" method="post">
+            <div class="form-group">
+                <label for="messages">Messages:</label>
+                <input type="text" id="messages" name="messages" class="form-control" value="{{ ad.messages }}" required>
+            </div>
+            <div class="form-group">
+                <label for="requirements">Requirements:</label>
+                <input type="text" id="requirements" name="requirements" class="form-control" value="{{ ad.requirements }}" required>
+            </div>
+            <div class="form-group">
+                <label for="payment_amount">Payment Amount:</label>
+                <input type="number" id="payment_amount" name="payment_amount" class="form-control" value="{{ ad.payment_amount }}" required>
+            </div>
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status" class="form-control" required>
+                    <option value="Accepted" {% if ad.status == 'Accepted' %} selected {% endif %}>Accepted</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Ad</button>
+            <a href="{{ url_for('manage_negotiated_ads11') }}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

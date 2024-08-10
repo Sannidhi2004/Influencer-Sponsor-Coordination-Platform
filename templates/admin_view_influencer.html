@@ -13,11 +13,22 @@
         margin-left: 0.5cm;
       }
     </style>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <button class="btn btn-primary go-back-btn" onclick="history.back()">
-        Go Back
+      <button class="btn btn-primary ms-2" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ml-3 ms-3"
+        onclick="window.location.href='/admin_dashboard'"
+      >
+        <i class="fas fa-home"></i> Dashboard
       </button>
     </nav>
     <div class="container my-5">
@@ -31,9 +42,7 @@
             />
             <div class="card-body text-center">
               <h5 class="card-title">{{ influencer.name }}</h5>
-              <p class="card-text">
-                <strong>Category:</strong> {{ influencer.category }}
-              </p>
+
               <p class="card-text">
                 <strong>Niche:</strong> {{ influencer.niche }}
               </p>

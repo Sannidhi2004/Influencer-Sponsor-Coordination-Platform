@@ -8,8 +8,25 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ml-3"
+        onclick="window.location.href='/sponsor_dashboard'"
+      >
+        <i class="fas fa-home"></i> Dashboard
+      </button>
+    </nav>
+
     <div class="container mt-4">
       <h1>Manage Negotiated Ads</h1>
 
@@ -28,21 +45,21 @@
           <p class="mb-1"><strong>Status:</strong> {{ ad.status }}</p>
 
           <form
-            action="{{ url_for('accept_ad', ad_id=ad.id) }}"
+            action="{{ url_for('accept_negotiated_ad', ad_id=ad.id) }}"
             method="POST"
             class="d-inline"
           >
             <button type="submit" class="btn btn-success btn-sm">Accept</button>
           </form>
           <form
-            action="{{ url_for('reject_ad', ad_id=ad.id) }}"
+            action="{{ url_for('reject_negotiated_ad', ad_id=ad.id) }}"
             method="POST"
             class="d-inline"
           >
             <button type="submit" class="btn btn-danger btn-sm">Reject</button>
           </form>
           <a
-            href="{{ url_for('update_ad', ad_id=ad.id) }}"
+            href="{{ url_for('update_negotiated_ad', ad_id=ad.id) }}"
             class="btn btn-warning btn-sm"
             >Update</a
           >

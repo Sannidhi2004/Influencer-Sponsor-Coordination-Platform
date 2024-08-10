@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Influencers</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: url("/static/uploads/influencers_bg.jpg") no-repeat center
+          center fixed;
+        background-size: cover;
+        background-blend-mode: lighten;
+      }
+      .content {
+        margin-top: 20px;
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        height: 420px; /* Adjusted height for cards */
+        width: 100%; /* Ensure cards take full width of column */
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+      .card-img-top {
+        height: 200px; /* Fixed height for images */
+        object-fit: cover; /* Cover image to fill the space */
+        width: 100%; /* Ensure image takes full width of card */
+      }
+      .card-body {
+        flex: 1 0 auto;
+        padding: 15px;
+      }
+      .card-title {
+        color: #00b09b;
+      }
+      .btn-view {
+        background: linear-gradient(to right, #00b09b, #96c93d);
+        color: white;
+      }
+      .btn-view {
+        margin-bottom: 20px; /* Additional space below the button */
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ml-3"
+        onclick="window.location.href='/sponsor_dashboard'"
+      >
+        <i class="fas fa-home"></i> Dashboard
+      </button>
+    </nav>
+    <!-- Navigation Bar -->
+
+    <!-- Main Content -->
+    <div class="container content">
+      <div class="row">
+        {% for influencer in influencers %}
+        <div class="col-md-4">
+          <div class="card">
+            <img
+              src="{{ url_for('static', filename='uploads/' ~ influencer.profile_picture) }}"
+              class="card-img-top"
+              alt="Profile Picture"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ influencer.name }}</h5>
+              <p class="card-text">
+                <strong>Category:</strong> {{ influencer.category }}<br />
+                <strong>Niche:</strong> {{ influencer.niche }}<br />
+                <strong>Reach:</strong> {{ influencer.reach }}<br />
+                <strong>Rating:</strong> {{ influencer.rating }} Stars
+              </p>
+              <a
+                href="{{ url_for('view_influencer', influencer_id=influencer.id) }}"
+                class="btn btn-view"
+                >View Details</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

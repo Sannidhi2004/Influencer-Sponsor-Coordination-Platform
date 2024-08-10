@@ -7,11 +7,22 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-      <button class="btn btn-secondary" onclick="history.back()">
-        Go Back
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+      <button class="btn btn-primary" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ml-3"
+        onclick="window.location.href='/influencer_dashboard/{{ current_user_id }}'"
+      >
+        <i class="fas fa-home"></i> Dashboard
       </button>
     </nav>
     <div class="container mt-5">

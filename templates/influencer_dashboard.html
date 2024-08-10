@@ -59,6 +59,12 @@
       .footer a:hover {
         color: #606060;
       }
+      .rating i {
+        color: #ffd990;
+      }
+      .rating i.checked {
+        color: #ffd300;
+      }
     </style>
   </head>
   <body>
@@ -163,6 +169,7 @@
               {% endfor %}
             </span>
           </p>
+          
           <p class="card-text">
             <strong>Total Earnings:</strong> ${{ total_earnings | round(2) }}
           </p>

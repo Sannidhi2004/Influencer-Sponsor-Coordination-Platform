@@ -14,12 +14,24 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
     />
-  </head>
-  <body>
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <button class="btn btn-primary" onclick="history.back()">
+      <i class="fas fa-arrow-left"></i> Go Back
+    </button>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
-    </nav>
+    <button
+      class="btn btn-danger ml-3"
+      onclick="window.location.href='/sponsor_dashboard'"
+    >
+      <i class="fas fa-home"></i> Dashboard
+    </button>
+  </nav>
     <div  class="container mt-5">
     <h1>Update Campaign</h1>
     <form

@@ -48,14 +48,67 @@
         padding: 0.5rem 1rem;
       }
     </style>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+      <button class="btn btn-primary" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ml-3"
+        onclick="window.location.href='/sponsor_dashboard'"
+      >
+        <i class="fas fa-home"></i> Dashboard
+      </button>
     </nav>
 
     <div class="container mt-5">
       <h1>Campaign Influencers</h1>
+
+      <!-- Search Form -->
+      <form
+        method="GET"
+        action="{{ url_for('campaign_influencer', campaign_id=campaign.id, influencer_id=influencer_id) }}"
+        class="mb-4"
+      >
+        <div class="form-row">
+          <div class="col">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="Name"
+              value="{{ request.args.get('name', '') }}"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="text"
+              name="niche"
+              class="form-control"
+              placeholder="Niche"
+              value="{{ request.args.get('niche', '') }}"
+            />
+          </div>
+          <div class="col">
+            <input
+              type="number"
+              name="reach"
+              class="form-control"
+              placeholder="Reach"
+              value="{{ request.args.get('reach', '') }}"
+            />
+          </div>
+          <div class="col">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+        </div>
+      </form>
 
       {% if influencers %}
       <div class="row mt-4">

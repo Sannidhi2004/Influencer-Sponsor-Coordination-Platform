@@ -7,13 +7,131 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 20px;
+      }
+      .form-section {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+      }
+      .card {
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .btn-custom {
+        background: linear-gradient(to right, #00b09b, #96c93d);
+        color: white;
+      }
+      .btn-custom:hover {
+        background: linear-gradient(to right, #00a896, #87d97c);
+      }
+      .btn-section {
+        margin-bottom: 20px;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <button class="btn btn-primary" onclick="history.back()">Go Back</button>
+      <button class="btn btn-primary" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ml-3"
+        onclick="window.location.href='/sponsor_dashboard'"
+      >
+        <i class="fas fa-home"></i> Dashboard
+      </button>
     </nav>
+
     <div class="container mt-5">
-      <h1 class="text-center">Manage Campaigns</h1>
+      <!-- Show Campaigns Button -->
+      <div class="text-center btn-section">
+        <a href="{{ url_for('show_campaign') }}" class="btn btn-success btn-lg">
+          <i class="fas fa-list"></i> Show Campaigns
+        </a>
+      </div>
+
+      {% if campaigns %}
+      <div class="row mt-4">
+        {% for campaign in campaigns %}
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{ campaign.name }}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">
+                {{ campaign.start_date.strftime('%Y-%m-%d') }} to {{
+                campaign.end_date.strftime('%Y-%m-%d') }}
+              </h6>
+              <p class="card-text">{{ campaign.description }}</p>
+              <p class="card-text">
+                <strong>Budget:</strong> ${{ campaign.budget }}
+              </p>
+              <p class="card-text">
+                <strong>Visibility:</strong> {{ campaign.visibility }}
+              </p>
+              <p class="card-text">
+                <strong>Goals:</strong> {{ campaign.goals }}
+              </p>
+              <p class="card-text">
+                <strong>Niche:</strong> {{ campaign.niche }}
+              </p>
+
+              <!-- Add Ads Button -->
+              <!-- Inside the card for each campaign -->
+              <a
+                href="{{ url_for('add_ads', campaign_id=campaign.id) }}"
+                class="btn btn-info btn-sm"
+                >Add Ads</a
+              >
+
+              <!-- View Ads Button -->
+              <a
+                href="{{ url_for('view_ads', campaign_id=campaign.id, influencer_id=current_user.id) }}"
+                class="btn btn-primary btn-sm ml-2"
+                >View Ads</a
+              >
+
+              <!-- Delete Campaign Form -->
+              <form
+                action="{{ url_for('delete_campaign', campaign_id=campaign.id) }}"
+                method="post"
+                style="display: inline"
+              >
+                <button type="submit" class="btn btn-danger btn-sm">
+                  Delete
+                </button>
+              </form>
+
+              <!-- Update Campaign Button -->
+              <a
+                href="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
+                class="btn btn-secondary btn-sm ml-2"
+                >Update</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <h1 class="text-center">Create Campaigns</h1>
 
       <!-- Form to create a new campaign -->
       <form action="{{ url_for('campaign') }}" method="post" class="mb-4">
@@ -137,75 +255,6 @@
       </form>
 
       <!-- Button to show tables or other actions -->
-      <div class="text-center mt-4">
-        <a href="{{ url_for('show_campaign') }}" class="btn btn-success"
-          >Show Campaigns</a
-        >
-      </div>
-
-      {% if campaigns %}
-      <div class="row mt-4">
-        {% for campaign in campaigns %}
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ campaign.name }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">
-                {{ campaign.start_date.strftime('%Y-%m-%d') }} to {{
-                campaign.end_date.strftime('%Y-%m-%d') }}
-              </h6>
-              <p class="card-text">{{ campaign.description }}</p>
-              <p class="card-text">
-                <strong>Budget:</strong> ${{ campaign.budget }}
-              </p>
-              <p class="card-text">
-                <strong>Visibility:</strong> {{ campaign.visibility }}
-              </p>
-              <p class="card-text">
-                <strong>Goals:</strong> {{ campaign.goals }}
-              </p>
-              <p class="card-text">
-                <strong>Niche:</strong> {{ campaign.niche }}
-              </p>
-
-              <!-- Add Ads Button -->
-              <!-- Inside the card for each campaign -->
-              <a
-                href="{{ url_for('add_ads', campaign_id=campaign.id) }}"
-                class="btn btn-info btn-sm"
-                >Add Ads</a
-              >
-
-              <!-- View Ads Button -->
-              <a
-                href="{{ url_for('view_ads', campaign_id=campaign.id, influencer_id=current_user.id) }}"
-                class="btn btn-primary btn-sm ml-2"
-                >View Ads</a
-              >
-
-              <!-- Delete Campaign Form -->
-              <form
-                action="{{ url_for('delete_campaign', campaign_id=campaign.id) }}"
-                method="post"
-                style="display: inline"
-              >
-                <button type="submit" class="btn btn-danger btn-sm">
-                  Delete
-                </button>
-              </form>
-
-              <!-- Update Campaign Button -->
-              <a
-                href="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
-                class="btn btn-secondary btn-sm ml-2"
-                >Update</a
-              >
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
     </div>
 
     <!-- Bootstrap JS and dependencies -->

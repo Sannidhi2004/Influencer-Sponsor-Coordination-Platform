@@ -50,11 +50,22 @@
         margin-left: 0.5cm;
       }
     </style>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <button class="btn btn-primary go-back-btn" onclick="history.back()">
-        Go Back
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button class="btn btn-primary ms-2" onclick="history.back()">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </button>
+
+      <button
+        class="btn btn-danger ms-3"
+        onclick="window.location.href='/admin_dashboard'"
+      >
+        <i class="fas fa-home"></i> Dashboard
       </button>
     </nav>
 

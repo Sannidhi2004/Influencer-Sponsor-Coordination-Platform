@@ -101,25 +101,24 @@ def influencer_dashboard(influencer_id):
             # Retrieve campaigns associated with the influencer
             campaigns = Campaign.query.filter(Campaign.associated_influencers.any(id=influencer.id)).all()
             ad_requests = Ad.query.filter_by(influencer_id=influencer.id).all()
-            if influencer:
-            # Convert reach to integer
-                try:
-                    reach = int(influencer.reach)
-                except ValueError:
-                    reach = 0  # Default value if conversion fails
             
-            if influencer.reach >= 500000:
+            try:
+                reach = int(influencer.reach)
+            except ValueError:
+                reach = 0  # Default value if conversion fails
+
+            if reach >= 500000:
                 rating = 5
-            elif influencer.reach >= 100000:
+            elif reach >= 100000:
                 rating = 4
-            elif influencer.reach >= 50000:
+            elif reach >= 50000:
                 rating = 3
-            elif influencer.reach >= 10000:
+            elif reach >= 10000:
                 rating = 2
-            elif influencer.reach >= 1000:
+            elif reach >= 1000:
                 rating = 1
             else:
-                rating = 0 
+                rating = 0
             total_earnings = sum(ad.payment_amount for ad in ad_requests if ad.status == 'Completed')
                
             return render_template(
@@ -339,9 +338,8 @@ def sponsor_dashboard():
 @app.route('/sponsor_dashboard', methods=["GET", "POST"])
 @login_required
 def sponsor_dashboard():
+
     sponsor_id = current_user.id
-    sponsor_name = session.get('username')
-    print(f"Current user ID: {current_user.id}")  # Debug print for current user ID
 
     public_campaigns = Campaign.query.filter_by(user_id=sponsor_id, visibility='Public').all()
     private_campaigns = Campaign.query.filter_by(user_id=sponsor_id, visibility='Private').all()
@@ -365,7 +363,7 @@ def sponsor_dashboard():
     print("Public Campaigns:", public_campaigns)  # Debug print for public campaigns
     print("Private Campaigns:", private_campaigns)  # Debug print for private campaigns
 
-    return render_template('sponsor_dashboard.html', sponsor_name=sponsor_name, public_campaigns=public_campaigns_progress, private_campaigns=private_campaigns_progress, campaign=visible_campaigns)
+    return render_template('sponsor_dashboard.html', public_campaigns=public_campaigns_progress, private_campaigns=private_campaigns_progress, campaign=visible_campaigns)
 
 
 @app.route('/sponsor_find')
@@ -447,6 +445,13 @@ def delete_influencer(influencer_id):
 def show_influencers():
     influencers = Influencer.query.all()
     return render_template('create_influencer.html', influencers=influencers)
+
+#sposnors can view influencers
+@app.route('/view_influencers_to_sponsor')
+@login_required
+def view_influencers_to_sponsor():
+    influencers = Influencer.query.all()
+    return render_template('view_influencers_to_sponsor.html', influencers=influencers)
 
 @app.route('/create_campaign', methods=["GET", "POST"])
 def create_campaign():
@@ -554,7 +559,6 @@ def influencer_priv_adrequests(influencer_id):
     # Fetch all ad requests for the influencer
     ad_requests = Ad.query.filter_by(influencer_id=influencer_id).all()
     print(f"Ad requests: {ad_requests}")
-    
     # Fetch campaign details for each ad request
     ad_requests = [ad for ad in ad_requests if ad.campaign_id not in flagged_campaigns]
     ad_requests_with_campaigns = []
@@ -562,7 +566,7 @@ def influencer_priv_adrequests(influencer_id):
         campaign = Campaign.query.get(ad.campaign_id)
         ad_requests_with_campaigns.append((ad, campaign))
     campaign_id = ad_requests[0].campaign_id if ad_requests else None
-    return render_template('influencer_priv_adrequests.html', ad_requests_with_campaigns=ad_requests_with_campaigns, influencer=influencer,campaign_id=campaign_id)
+    return render_template('influencer_priv_adrequests.html', ad_requests_with_campaigns=ad_requests_with_campaigns, influencer=influencer,campaign_id=campaign_id, influencer_id=influencer.id)
 
 
 
@@ -640,6 +644,24 @@ def delete_ad(ad_id):
 def campaign_influencer(campaign_id, influencer_id):
     campaign = Campaign.query.get_or_404(campaign_id)
     influencers = Influencer.query.all()
+    
+    #for search functionality
+    name = request.args.get('name')
+    niche = request.args.get('niche')
+    reach = request.args.get('reach')
+     # Base query
+    query = Influencer.query
+
+    # Apply filters based on search criteria
+    if name:
+        query = query.filter(Influencer.name.ilike(f"%{name}%"))
+    if niche:
+        query = query.filter(Influencer.niche.ilike(f"%{niche}%"))
+    if reach:
+        query = query.filter(Influencer.reach == reach)
+
+    influencers = query.all()
+    
     return render_template('campaign_influencer.html', campaign_id=campaign_id, influencer_id=influencer_id, campaign=campaign, influencers=influencers)
 
 @app.route('/show_influencers1', methods=["GET"])
@@ -763,7 +785,7 @@ def influencer_ads(campaign_id):
     
     # Fetch the influencer corresponding to the current user
     influencer = Influencer.query.filter_by(user_id=current_user.id).first()
-    
+    current_user_id = current_user.id
     # Debug prints
     print(f"Current user ID: {current_user.id}")
     print(f"Fetched influencer: {influencer}")
@@ -772,12 +794,12 @@ def influencer_ads(campaign_id):
     if influencer is None:
         # Handle the case where the user is not an influencer
 
-        return redirect(url_for('some_other_route'))
+        pass
     
     print(f"Influencer ID: {influencer.id}")
 
-    ads = Ad.query.filter_by(campaign_id=campaign_id, influencer_id=influencer.id).all()
-    return render_template('influencer_ads.html', campaign=campaign, ads=ads, influencer=influencer)
+    ads = Ad.query.filter_by(campaign_id=campaign_id, influencer_id=influencer.id, status='Pending').all()
+    return render_template('influencer_ads.html', campaign=campaign, ads=ads, influencer=influencer, current_user_id=current_user_id)
 
 
 
@@ -800,6 +822,17 @@ def reject_ad11(ad_id):
     #return redirect(url_for('influencer_ads', campaign_id=ad.campaign_id))
     return redirect(url_for('influencer_ads', campaign_id=ad.campaign_id))
 
+#as the influencer sees the ads of public campaigns and requests the sponsor
+@app.route('/request_ad11/<int:ad_id>', methods=['GET', 'POST'])
+@login_required
+def request_ad11(ad_id):
+    ad = Ad.query.get_or_404(ad_id)
+    ad.status = 'Requested'
+    db.session.commit()
+    #return redirect(url_for('influencer_ads', campaign_id=ad.campaign_id))
+    return redirect(url_for('influencer_ads', campaign_id=ad.campaign_id))
+
+
 @app.route('/negotiate_ad11/<int:ad_id>', methods=['GET', 'POST'])
 @login_required
 def negotiate_ad11(ad_id):
@@ -809,6 +842,8 @@ def negotiate_ad11(ad_id):
     db.session.commit()
     return redirect(url_for('influencer_ads', campaign_id=ad.campaign_id))
 
+
+#This will let sponsor manage the requested and negotiated ads by the influencer (for the public campaigns)
 @app.route('/manage_negotiated_ads11', methods=['GET'])
 @login_required
 def manage_negotiated_ads11():
@@ -816,6 +851,45 @@ def manage_negotiated_ads11():
     excluded_statuses = ['Accepted', 'Rejected', 'Completed', 'Pending','Transaction Done']
     negotiated_ads = Ad.query.filter(~Ad.status.in_(excluded_statuses)).all()   
     return render_template('manage_negotiated_ads.html', ads=negotiated_ads)
+
+
+@app.route('/accept_negotiated_ad/<int:ad_id>', methods=['GET', 'POST'])
+@login_required
+def accept_negotiated_ad(ad_id):
+    ad = Ad.query.get_or_404(ad_id)
+    ad.status = 'Accepted'
+    db.session.commit()
+    #return redirect(url_for('active_campaigns'))
+    return redirect(url_for('manage_negotiated_ads11'))
+
+
+@app.route('/reject_negotiated_ad/<int:ad_id>', methods=['GET', 'POST'])
+@login_required
+def reject_negotiated_ad(ad_id):
+    ad = Ad.query.get_or_404(ad_id)
+    ad.status = 'Rejected'
+    db.session.commit()
+    #return redirect(url_for('influencer_ads', campaign_id=ad.campaign_id))
+    return redirect(url_for('manage_negotiated_ads11'))
+
+
+@app.route('/update_negotiated_ad/<int:ad_id>', methods=['GET', 'POST'])
+def update_negotiated_ad(ad_id):
+    ad = Ad.query.get_or_404(ad_id)
+
+    if request.method == 'POST':
+        ad.messages = request.form['messages']
+        ad.requirements = request.form['requirements']
+        ad.payment_amount = request.form['payment_amount']
+        ad.status = request.form.get('status', 'Accepted')
+
+        try:
+            db.session.commit()
+            return redirect(url_for('manage_negotiated_ads11'))
+        except:
+            return 'Error updating ad'
+
+    return render_template('update_negotiated_ad.html', ad=ad)
 
 
 @app.route('/active_campaigns/<int:influencer_id>', methods=['GET', 'POST'])
@@ -828,7 +902,12 @@ def active_campaigns(influencer_id):
     print(f"Influencer ID: {influencer.id}")
     print(f"Ads fetched for active campaigns: {ads}")
     
-    return render_template('active_campaigns.html', influencer=influencer, ads=ads)
+    return render_template('active_campaigns.html', influencer=influencer, influencer_id=influencer.id, ads=ads)
+
+
+
+
+
 
 @app.route('/search_privatecampaigns', methods=["GET", "POST"])
 def search_privatecampaigns():
@@ -1058,6 +1137,7 @@ def stats(influencer_id):
 
         return render_template('stats.html',
                                influencer=influencer,
+                               influencer_id=influencer.id,
                                ad_requests=ad_requests,
                                completed_requests=completed_requests,
                                payment_received=payment_received,
