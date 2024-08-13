@@ -57,7 +57,9 @@
               <p class="card-text">
                 <strong>Payment Amount:</strong> ${{ ad.payment_amount }}
               </p>
+
               <p class="card-text"><strong>Status:</strong> {{ ad.status }}</p>
+              {% if ad.status == 'Pending' %}
               <div class="btn-group" role="group" aria-label="Ad actions">
                 <a
                   href="{{ url_for('update_ad', ad_id=ad.id) }}"
@@ -72,6 +74,7 @@
                   <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
               </div>
+              {% endif %}
             </div>
           </div>
         </div>

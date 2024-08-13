@@ -11,6 +11,20 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
       rel="stylesheet"
     />
+    <style>
+      .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+      .card-body {
+        flex: 1;
+      }
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
@@ -27,7 +41,6 @@
     </nav>
     <div class="container mt-5">
       <h1 class="text-center">Campaigns</h1>
-
       <!-- Search Form -->
       <form
         action="{{ url_for('search_campaigns') }}"
@@ -35,7 +48,7 @@
         class="mb-4"
       >
         <div class="form-row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <input
               type="text"
               name="name"
@@ -43,7 +56,7 @@
               placeholder="Search by Name"
             />
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <input
               type="text"
               name="niche"
@@ -67,8 +80,10 @@
               placeholder="Max Budget"
             />
           </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Search</button>
       </form>
 
       <!-- Display Campaigns -->

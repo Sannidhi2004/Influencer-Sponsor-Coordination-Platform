@@ -43,6 +43,16 @@
       .btn-section {
         margin-bottom: 20px;
       }
+      .card-deck .card {
+        min-width: 250px;
+        flex: 1;
+      }
+      .niche-heading {
+        background-color: #e9ecef;
+        border-radius: 0.25rem;
+        padding: 10px;
+        margin-bottom: 15px;
+      }
     </style>
   </head>
   <body>
@@ -60,71 +70,66 @@
     </nav>
 
     <div class="container mt-5">
-      <!-- Show Campaigns Button -->
       <div class="text-center btn-section">
         <a href="{{ url_for('show_campaign') }}" class="btn btn-success btn-lg">
           <i class="fas fa-list"></i> Show Campaigns
         </a>
       </div>
-
       {% if campaigns %}
-      <div class="row mt-4">
+      <div class="card-deck mt-4">
         {% for campaign in campaigns %}
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">{{ campaign.name }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">
-                {{ campaign.start_date.strftime('%Y-%m-%d') }} to {{
-                campaign.end_date.strftime('%Y-%m-%d') }}
-              </h6>
-              <p class="card-text">{{ campaign.description }}</p>
-              <p class="card-text">
-                <strong>Budget:</strong> ${{ campaign.budget }}
-              </p>
-              <p class="card-text">
-                <strong>Visibility:</strong> {{ campaign.visibility }}
-              </p>
-              <p class="card-text">
-                <strong>Goals:</strong> {{ campaign.goals }}
-              </p>
-              <p class="card-text">
-                <strong>Niche:</strong> {{ campaign.niche }}
-              </p>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">{{ campaign.name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              {{ campaign.start_date.strftime('%Y-%m-%d') }} to {{
+              campaign.end_date.strftime('%Y-%m-%d') }}
+            </h6>
+            <p class="card-text">{{ campaign.description }}</p>
+            <p class="card-text">
+              <strong>Budget:</strong> ${{ campaign.budget }}
+            </p>
+            <p class="card-text">
+              <strong>Visibility:</strong> {{ campaign.visibility }}
+            </p>
+            <p class="card-text">
+              <strong>Goals:</strong> {{ campaign.goals }}
+            </p>
+            <p class="card-text">
+              <strong>Niche:</strong> {{ campaign.niche }}
+            </p>
 
-              <!-- Add Ads Button -->
-              <!-- Inside the card for each campaign -->
-              <a
-                href="{{ url_for('add_ads', campaign_id=campaign.id) }}"
-                class="btn btn-info btn-sm"
-                >Add Ads</a
-              >
+            <!-- Add Ads Button -->
+            <a
+              href="{{ url_for('add_ads', campaign_id=campaign.id) }}"
+              class="btn btn-info btn-sm"
+              >Add Ads</a
+            >
 
-              <!-- View Ads Button -->
-              <a
-                href="{{ url_for('view_ads', campaign_id=campaign.id, influencer_id=current_user.id) }}"
-                class="btn btn-primary btn-sm ml-2"
-                >View Ads</a
-              >
+            <!-- View Ads Button -->
+            <a
+              href="{{ url_for('view_ads', campaign_id=campaign.id, influencer_id=current_user.id) }}"
+              class="btn btn-primary btn-sm ml-2"
+              >View Ads</a
+            >
 
-              <!-- Delete Campaign Form -->
-              <form
-                action="{{ url_for('delete_campaign', campaign_id=campaign.id) }}"
-                method="post"
-                style="display: inline"
-              >
-                <button type="submit" class="btn btn-danger btn-sm">
-                  Delete
-                </button>
-              </form>
+            <!-- Delete Campaign Form -->
+            <form
+              action="{{ url_for('delete_campaign', campaign_id=campaign.id) }}"
+              method="post"
+              style="display: inline"
+            >
+              <button type="submit" class="btn btn-danger btn-sm">
+                Delete
+              </button>
+            </form>
 
-              <!-- Update Campaign Button -->
-              <a
-                href="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
-                class="btn btn-secondary btn-sm ml-2"
-                >Update</a
-              >
-            </div>
+            <!-- Update Campaign Button -->
+            <a
+              href="{{ url_for('update_campaign', campaign_id=campaign.id) }}"
+              class="btn btn-secondary btn-sm ml-2"
+              >Update</a
+            >
           </div>
         </div>
         {% endfor %}

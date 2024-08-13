@@ -84,7 +84,15 @@
                 <div class="card-body">
                   <h5 class="card-title">Item Type: {{ flag.item_type }}</h5>
                   <p class="card-text">Item ID: {{ flag.item_id }}</p>
-                  <p class="card-text">Item Name: {{ flag.item_name }}</p>
+                  <p class="card-text">
+                    {% if flag.item_type == 'Influencer' %} Influencer Name: {{
+                    (influencer_dict.get(flag.item_id) or 'Unknown') }} {% elif
+                    flag.item_type == 'Sponsor' %} Sponsor Name: {{
+                    (sponsor_dict.get(flag.item_id) or 'Unknown') }}  {% elif flag.item_type == 'Campaign' %}
+                    <p class="card-text">Campaign Name: {{ campaign_dict[flag.item_id] }}</p>
+                    
+                  {% endif %}
+                  </p>
                   <p class="card-text">Reason: {{ flag.reason }}</p>
                   {% if flag.item_type == 'Influencer' %}
                   <a
@@ -121,7 +129,6 @@
           </div>
         </div>
       </div>
-
       <div class="mb-5">
         <div class="heading">Ongoing Campaigns</div>
         <div class="card-body">

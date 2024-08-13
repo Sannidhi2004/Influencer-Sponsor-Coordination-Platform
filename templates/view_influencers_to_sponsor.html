@@ -66,6 +66,47 @@
     </nav>
     <!-- Navigation Bar -->
 
+    <!-- Search Form -->
+    <div class="container">
+      <form
+        action="{{ url_for('search_influencers') }}"
+        method="GET"
+        class="mb-4"
+      >
+        <div class="form-row">
+          <div class="col-md-3">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="Name"
+              value="{{ request.args.get('name', '') }}"
+            />
+          </div>
+
+          <div class="col-md-3">
+            <input
+              type="text"
+              name="niche"
+              class="form-control"
+              placeholder="Niche"
+              value="{{ request.args.get('niche', '') }}"
+            />
+          </div>
+          <div class="col-md-3">
+            <input
+              type="text"
+              name="reach"
+              class="form-control"
+              placeholder="Reach"
+              value="{{ request.args.get('reach', '') }}"
+            />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Search</button>
+      </form>
+    </div>
+
     <!-- Main Content -->
     <div class="container content">
       <div class="row">
@@ -80,10 +121,8 @@
             <div class="card-body">
               <h5 class="card-title">{{ influencer.name }}</h5>
               <p class="card-text">
-                <strong>Category:</strong> {{ influencer.category }}<br />
                 <strong>Niche:</strong> {{ influencer.niche }}<br />
                 <strong>Reach:</strong> {{ influencer.reach }}<br />
-                <strong>Rating:</strong> {{ influencer.rating }} Stars
               </p>
               <a
                 href="{{ url_for('view_influencer', influencer_id=influencer.id) }}"
